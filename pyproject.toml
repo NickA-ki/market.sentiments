@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "streamlit-sandbox"
+version = "0.1.0"
+description = "streamlit sandbox"
+authors = ["NickA-ki <nick.aristidou@ki-insurance.com>"]
+readme = "README.md"
+packages = [{include = "streamlit_sandbox"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+streamlit = "^1.24.0"
+pandas = "^2.0.3"
+plotly = "^5.15.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
