@@ -1,6 +1,6 @@
 import streamlit as st
 
-from data.source import source
+from data.source import source, DataSchema
 from src.components.bar_charts import plot_major_loss_trend
 from src.components.filter_dataframe import draw_aggrid
 from src.utils.utils import utils
@@ -25,7 +25,10 @@ chart_slot = st.empty()
 # AgGrid ----
 st.text("")
 if len(search) > 0:
-    df_search = df[(df.Title.str.contains(search)) | (df.Summary.str.contains(search))]
+    df_search = df[
+        (df[DataSchema.TITLE].str.contains(search))
+        | (df[DataSchema.SUMMARY].str.contains(search))
+    ]
 else:
     df_search = df
 

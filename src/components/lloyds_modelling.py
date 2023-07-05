@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import plotly.express as px
 
 
@@ -255,6 +256,14 @@ class LloydsModel(Copula):
         g.set_titles("")
         g.set(yticks=[], ylabel="")
         g.despine(bottom=True, left=True)
+        legend_items = []
+        q = 1
+        for i in colours2[:-1]:
+            legend_items.append(mpatches.Patch(color=i, label=f"Q{q}"))
+            q += 1
+        plt.legend(
+            handles=legend_items, bbox_to_anchor=(1, 8.6), title="Quintiles"
+        ).get_frame().set_facecolor("white")
         return g
 
     def create_default_weight(self) -> pd.DataFrame:

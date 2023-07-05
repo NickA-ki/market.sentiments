@@ -1,7 +1,7 @@
 import streamlit as st
 import datetime
 
-from data.source import source
+from data.source import source, DataSchema
 from src.components.bar_charts import plot_article_sentiments
 from src.components.filter_dataframe import draw_aggrid
 from src.utils.utils import utils
@@ -24,9 +24,9 @@ end_date = st.sidebar.date_input("End date", datetime.date.today())
 
 # Data filtering ----
 df = df[
-    (df.TextSearch.str.contains(search.lower()))
-    & (df.Date >= start_date)
-    & (df.Date <= end_date)
+    (df[DataSchema.SEARCH].str.contains(search.lower()))
+    & (df[DataSchema.DATE] >= start_date)
+    & (df[DataSchema.DATE] <= end_date)
 ].reset_index(drop=True)
 articles = df.shape[0]
 sentiment = "Positive" if df.compound.sum() >= 0 else "Negative"

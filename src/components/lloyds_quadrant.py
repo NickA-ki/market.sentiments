@@ -219,10 +219,9 @@ def plot_syndicate_quadrant(
     fig.add_hline(y=dFig["Volatility"].mean(), line_dash="dot")
     fig.update_layout(
         title=f"Weighted NCOR vs Volatility vs Net - {COB}",
-        autosize=False,
+        legend=dict(orientation="h", xanchor="center", x=0.5, y=1.4),
         xaxis=dict(ticksuffix="%"),
         yaxis=dict(title="Volatility CoV"),
-        width=1600,
         height=800,
         margin=dict(l=50, r=50, b=10, t=50, pad=2),
     )
