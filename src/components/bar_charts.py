@@ -2,6 +2,8 @@ from pandas import DataFrame, Series
 import plotly.express as px
 import plotly.graph_objects as go
 
+from src.utils.utils import utils
+
 
 def plot_article_sentiments(df: DataFrame, percentage: bool = True) -> px.bar:
     try:
@@ -38,12 +40,11 @@ def plot_article_sentiments(df: DataFrame, percentage: bool = True) -> px.bar:
         )
 
         fig.update_layout(
-            template="plotly_white",
             height=650,
             yaxis=dict(ticksuffix=suffix),
         )
 
-        return fig
+        return utils.figure_layout(fig)
 
     except:
         return {}
@@ -82,11 +83,10 @@ def plot_major_loss_trend(df: DataFrame, loss_search: str = "Ian") -> go.Figure:
     # fig.add_annotation(x=5.3, y=50, text="Ian", showarrow=False, arrowhead=1)
     fig.update_layout(
         barmode="stack",
-        template="plotly_white",
         yaxis=dict(title="# Major Loss Articles"),
         xaxis=dict(title="Date"),
         margin=dict(l=25, r=25, t=20, b=10),
         legend=dict(orientation="h", xanchor="center", x=0.5, y=1.4),
     )
 
-    return fig
+    return utils.figure_layout(fig)

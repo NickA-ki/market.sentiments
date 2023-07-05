@@ -1,22 +1,15 @@
 import streamlit as st
 
-from data.source import load_data
+from data.source import source
 from src.components.bar_charts import plot_major_loss_trend
 from src.components.filter_dataframe import draw_aggrid
+from src.utils.utils import utils
 
 # NOTE: loading data ----
-df = load_data(table="major_loss_articles")
+df = source.load_data(table="major_loss_articles")
 
 # Page Header ----
-st.set_page_config(layout="wide")
-col1, col2 = st.columns([1, 9], gap="small")
-with col1:
-    st.image(
-        "assets/dr_nick.jpeg",
-        width=100,
-    )
-with col2:
-    st.title("Major Loss Tracking")
+utils.page_title("Major Loss Tracking")
 
 # sidebar controls ----
 st.sidebar.subheader("Major loss search")

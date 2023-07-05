@@ -1,36 +1,18 @@
 import streamlit as st
 import datetime
 
-from data.source import load_data
+from data.source import source
 from src.components.bar_charts import plot_article_sentiments
 from src.components.filter_dataframe import draw_aggrid
+from src.utils.utils import utils
 from streamlit_extras import toggle_switch
 from streamlit_card import card
 
 
-df = load_data()
-card_style = (
-    {
-        "card": {
-            "height": "150px",
-            "width": "150px",
-            "border-radius": "40px",
-            "box-shadow": "0 0 10px rgba(0,0,0,0.5)",
-            "background-color": "lightgrey",
-        },
-    },
-)
+df = source.load_data()
 
 # Page Header ----
-st.set_page_config(layout="wide")
-col1, col2 = st.columns([1, 9], gap="small")
-with col1:
-    st.image(
-        "assets/dr_nick.jpeg",
-        width=100,
-    )
-with col2:
-    st.title("Market Tracking")
+utils.page_title("Market Tracking")
 
 # sidebar controls ----
 st.sidebar.subheader("Article Search")
@@ -60,13 +42,13 @@ with card2:
     card(
         text="Articles",
         title=f"{articles:,}",
-        styles=card_style[0],
+        styles=utils.card_style[0],
         on_click=lambda: None,
     )
     card(
         text="Mkt Sentiment",
         title=f"{sentiment}",
-        styles=card_style[0],
+        styles=utils.card_style[0],
         on_click=lambda: None,
     )
 

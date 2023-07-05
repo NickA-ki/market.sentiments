@@ -1,22 +1,18 @@
 import plotly.graph_objs as go
-from plotly.subplots import make_subplots
 import plotly.express as px
 import numpy as np
 import pandas as pd
 
-
-def wm(x, weights) -> int:
-    try:
-        return np.average(x, weights=weights)
-    except ZeroDivisionError:
-        return 0
+from src.utils.utils import utils
 
 
-def add_lloyds(cob_df: pd.DataFrame, lloyds: pd.DataFrame, COB: str) -> pd.DataFrame:
+def add_lloyds(
+    cob_df: pd.DataFrame, lloyds: pd.DataFrame, COB: str, timeframe: int = 9
+) -> pd.DataFrame:
     df = (
         lloyds[
             (lloyds["LloydsGlobalCOB"] == COB)
-            & (lloyds.Year >= lloyds.Year.max() - 9)
+            & (lloyds.Year >= lloyds.Year.max() - timeframe)
             & (lloyds.Amount > 0)
         ]
         .groupby(["Year", "ManagingAgent", "SyndicateCode", "LineItem"])
@@ -34,7 +30,7 @@ def add_lloyds(cob_df: pd.DataFrame, lloyds: pd.DataFrame, COB: str) -> pd.DataF
         .apply(
             lambda x: pd.Series(
                 [
-                    wm(
+                    utils.weighted_mean(
                         x["Combined ratio"],
                         weights=x["Net"],
                     ),
@@ -56,7 +52,6 @@ def historic_cob(
     COB: str,
     syndicates: list,
     timeframe: int = 9,
-    n: int = 31,
     net: float = 20,
 ) -> pd.DataFrame:
     df = (
@@ -76,7 +71,7 @@ def historic_cob(
         )
         .reset_index()
     )
-    df2 = add_lloyds(df, lloyds, COB)
+    df2 = add_lloyds(df, lloyds, COB, timeframe)
     all_syndicates = np.append(
         syndicates,
         df2[df2["Year"] == lloyds.Year.max()]
@@ -90,7 +85,7 @@ def historic_cob(
         .apply(
             lambda x: pd.Series(
                 [
-                    wm(
+                    utils.weighted_mean(
                         x["Combined ratio"],
                         weights=x["Net"],
                     ),
@@ -126,10 +121,9 @@ def plot_syndicate_quadrant(
     COB: str,
     syndicates: list,
     timeframe: int = 9,
-    n: int = 31,
     net: float = 20,
 ) -> go.Figure:
-    df = historic_cob(lloyds, COB, syndicates, timeframe, n, net)
+    df = historic_cob(lloyds, COB, syndicates, timeframe, net)
     dFig = df[df["ManagingAgent"] != "Lloyd's"]
     lloyds_ref = df[df["ManagingAgent"] == "Lloyd's"]
     dFig = dFig.sort_values(["Net"], ascending=False)
@@ -225,7 +219,6 @@ def plot_syndicate_quadrant(
     fig.add_hline(y=dFig["Volatility"].mean(), line_dash="dot")
     fig.update_layout(
         title=f"Weighted NCOR vs Volatility vs Net - {COB}",
-        template="plotly_white",
         autosize=False,
         xaxis=dict(ticksuffix="%"),
         yaxis=dict(title="Volatility CoV"),
@@ -234,4 +227,4 @@ def plot_syndicate_quadrant(
         margin=dict(l=50, r=50, b=10, t=50, pad=2),
     )
 
-    return fig
+    return utils.figure_layout(fig)

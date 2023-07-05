@@ -31,6 +31,7 @@ more-itertools==9.1.0
 numpy==1.25.0
 packaging==23.1
 pandas==2.0.3
+patsy==0.5.3
 Pillow==9.5.0
 plotly==5.15.0
 protobuf==4.23.3
@@ -48,10 +49,13 @@ pytz-deprecation-shim==0.1.0.post0
 PyYAML==6.0
 requests==2.31.0
 rich==13.4.2
+scipy==1.11.1
+seaborn==0.12.2
 six==1.16.0
 smmap==5.0.0
 soupsieve==2.4.1
 st-annotated-text==4.0.0
+statsmodels==0.14.0
 streamlit==1.24.0
 streamlit-aggrid==0.3.4.post3
 streamlit-camera-input-live==0.2.0
