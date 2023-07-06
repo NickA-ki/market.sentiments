@@ -21,6 +21,8 @@ start_date = st.sidebar.date_input(
     "Start date", datetime.datetime.strptime("2020-01-01", "%Y-%M-%d")
 )
 end_date = st.sidebar.date_input("End date", datetime.date.today())
+# with st.sidebar:
+#     logout()
 
 # Data filtering ----
 df = df[
@@ -30,7 +32,6 @@ df = df[
 ].reset_index(drop=True)
 articles = df.shape[0]
 sentiment = "Positive" if df.compound.sum() >= 0 else "Negative"
-
 
 # Chart and KPI Cards ----
 tog = toggle_switch.st_toggle_switch(label="Show as % of Articles:", default_value=True)
@@ -56,7 +57,6 @@ with card2:
 st.subheader("Articles:")
 grid_response = draw_aggrid(df)
 df = grid_response["data"]
-
 
 # Append chart data ----
 with st.spinner("Displaying results..."):

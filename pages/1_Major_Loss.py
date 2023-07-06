@@ -5,6 +5,7 @@ from src.components.bar_charts import plot_major_loss_trend
 from src.components.filter_dataframe import draw_aggrid
 from src.utils.utils import utils
 
+
 # NOTE: loading data ----
 df = source.load_data(table="major_loss_articles")
 
@@ -13,14 +14,12 @@ utils.page_title("Major Loss Tracking")
 
 # sidebar controls ----
 st.sidebar.subheader("Major loss search")
-search = st.sidebar.text_input("Search articles", "Ian")
+search = st.sidebar.text_input("Search articles", "Ian", key="search2")
 st.sidebar.text("Search is case sensitive")
-
 
 # Chart ----
 st.text("")
 chart_slot = st.empty()
-
 
 # AgGrid ----
 st.text("")
