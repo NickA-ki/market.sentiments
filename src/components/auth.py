@@ -4,9 +4,15 @@ import yaml
 from yaml.loader import SafeLoader
 
 
-def authenticate() -> list:
+def read_config() -> yaml:
     with open("./auth.yaml") as file:
         config = yaml.load(file, Loader=SafeLoader)
+
+    return config
+
+
+def authenticate() -> list:
+    config = read_config()
 
     authenticator = stauth.Authenticate(
         config["credentials"],
@@ -21,8 +27,7 @@ def authenticate() -> list:
     return authenticator, authentication_status
 
 
-def logout() -> None:
-    authenticator, authentication_status = authenticate()
+def logout(authenticator) -> None:
     authenticator.logout("Logout", "main", key="unique_key")
 
 

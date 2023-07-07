@@ -48,40 +48,34 @@ tab1, tab2, tab3, tab4 = st.tabs(
     ]
 )
 
-with st.spinner("Loading page..."):
+with st.spinner("Loading Modelling..."):
     # Model ----
     model = LloydsModel(lloyds, cob)
 
     # Chart ----
     with tab1:
         st.text("")
-        with st.spinner("Loading Data..."):
-            chart_slot = st.empty()
+        chart_slot = st.empty()
 
     with tab2:
         st.text("")
-        with st.spinner("Loading Data..."):
-            st.pyplot(
-                plot_cor_change(lloyds, cob, syndicates), use_container_width=True
-            )
+        st.pyplot(plot_cor_change(lloyds, cob, syndicates), use_container_width=True)
 
     with tab3:
         st.text("")
-        with st.spinner("Loading Modelling..."):
-            st.pyplot(model.plot_event_year_kde(), use_container_width=True)
+        st.pyplot(model.plot_event_year_kde(), use_container_width=True)
 
     with tab4:
         st.text("")
         head, tail = st.columns(2)
-        with st.spinner("Loading Modelling..."):
-            head.pyplot(
-                model.plot_model_output(alpha=1, codes=syndicates),
-                use_container_width=True,
-            )
-            tail.pyplot(
-                model.plot_model_output(alpha=1, head=False, codes=syndicates),
-                use_container_width=True,
-            )
+        head.pyplot(
+            model.plot_model_output(alpha=1, codes=syndicates),
+            use_container_width=True,
+        )
+        tail.pyplot(
+            model.plot_model_output(alpha=1, head=False, codes=syndicates),
+            use_container_width=True,
+        )
 
     # Attach updated chart ---
     chart_slot.plotly_chart(

@@ -40,7 +40,8 @@ def plot_article_sentiments(df: DataFrame, percentage: bool = True) -> px.bar:
         )
 
         fig.update_layout(
-            height=650,
+            height=750,
+            legend=dict(title="", orientation="h", xanchor="center", x=0.3, y=1.1),
             yaxis=dict(ticksuffix=suffix),
         )
 
@@ -79,14 +80,34 @@ def plot_major_loss_trend(df: DataFrame, loss_search: str = "Ian") -> go.Figure:
                 marker_color="lightgrey",
             )
         )
-    # fig.add_vline(x=5.5, line_width=2, line_dash="dash", line_color="black")
+    fig.add_hline(
+        y=df2.Title.mean(),
+        line_width=2,
+        line_dash="dash",
+        line_color="black",
+    )
+    ave_ml = int(round(df2.Title.mean(), 0))
+    fig.add_annotation(
+        y=ave_ml + 1,
+        x=df2.YearMonth.unique()[-1],
+        text=f"Average no. Reported Major Losses: {ave_ml}",
+        showarrow=False,
+        arrowhead=1,
+    )
+    # fig.add_vline(
+    #     x=sorted(df3.YearMonth.unique())[0],
+    #     line_width=2,
+    #     line_dash="dash",
+    #     line_color="black",
+    # )
     # fig.add_annotation(x=5.3, y=50, text="Ian", showarrow=False, arrowhead=1)
     fig.update_layout(
         barmode="stack",
+        height=550,
         yaxis=dict(title="# Major Loss Articles"),
         xaxis=dict(title="Date"),
         margin=dict(l=25, r=25, t=20, b=10),
-        legend=dict(orientation="h", xanchor="center", x=0.5, y=1.4),
+        legend=dict(orientation="h", xanchor="center", x=0.5, y=1.1),
     )
 
     return utils.figure_layout(fig)

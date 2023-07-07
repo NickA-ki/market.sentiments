@@ -6,7 +6,7 @@ credentials:
       password: '$2b$12$MtJ8gJ4dzdkyrD49mr.Z1.fd9rVcow9cFIgl97yuORWbsg4T71l82'
 cookie:
   expiry_days: 30
-  key: streamlit@markettracking # Must be string
+  key: streamlit@markettracking3 # Must be string
   name: market_tracking_cookie
 preauthorized:
   emails:

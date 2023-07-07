@@ -9,13 +9,26 @@ class Utils:
             {
                 "card": {
                     "height": "150px",
-                    "width": "150px",
+                    "width": "175px",
                     "border-radius": "40px",
                     "box-shadow": "0 0 10px rgba(0,0,0,0.5)",
                     "background-color": "lightgrey",
+                    "padding": "0px",
+                    "margin": "10px",
                 },
             },
         )
+        self.hide_bar = """
+            <style>
+            [data-testid="stSidebar"][aria-expanded="true"] > div:first-child {
+                visibility:hidden;
+                width: 0px;
+            }
+            [data-testid="stSidebar"][aria-expanded="false"] > div:first-child {
+                visibility:hidden;
+            }
+            </style>
+        """
 
     def figure_layout(self, fig: Figure) -> Figure:
         fig = fig.update_layout(template="plotly_white")
@@ -28,8 +41,7 @@ class Utils:
         except ZeroDivisionError:
             return 0
 
-    def page_title(self, title: str) -> None:
-        st.set_page_config(layout="wide")
+    def page_title(self, title: str, n: int = 0) -> None:
         col1, col2 = st.columns([1, 8], gap="large")
         with col1:
             st.image(
