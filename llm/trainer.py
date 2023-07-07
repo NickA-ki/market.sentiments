@@ -52,7 +52,7 @@ class LLMIns(DataSource, DataSchema):
 
         return response.choices[0].text
 
-    def falcon_generate(self) -> str:
+    def falcon_generate(self, question: str) -> str:
         template = """
         You are an artificial intelligence assistant who understands insurance.
         The assitant gives market insight updates to the user's question.
@@ -60,4 +60,4 @@ class LLMIns(DataSource, DataSchema):
         """
         prompt = PromptTemplate(template=template, input_variables=["question"])
         llm_chain = LLMChain(prompt=prompt, llm=self.llm)
-        return llm_chain
+        return llm_chain.run(question)

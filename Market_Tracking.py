@@ -16,7 +16,7 @@ authenticator, authentication_status = authenticate()
 
 if authentication_status:
     df = source.load_data()
-    falcon_model = LLMIns().falcon_generate()
+    ai_model = LLMIns()
 
     # Page Header ----
     utils.page_title("Market Tracking")
@@ -48,7 +48,7 @@ if authentication_status:
     # Generate the response
     if st.button("Get Answer"):
         with st.spinner("Generating Answer..."):
-            response = falcon_model.run(question)
+            response = ai_model.falcon_generate(question)
         st.success(response)
 
     # Chart and KPI Cards ----
