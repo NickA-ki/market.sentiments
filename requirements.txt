@@ -1,3 +1,4 @@
+accelerate==0.20.3
 aiohttp==3.8.4
 aiosignal==1.3.1
 altair==5.0.1
@@ -5,6 +6,7 @@ async-timeout==4.0.2
 attrs==23.1.0
 bcrypt==4.0.1
 beautifulsoup4==4.12.2
+bitsandbytes==0.39.1
 blinker==1.6.2
 cachetools==5.3.1
 certifi==2023.5.7
@@ -49,6 +51,7 @@ mypy-extensions==1.0.0
 networkx==3.1
 numexpr==2.8.4
 numpy==1.25.0
+openai==0.27.8
 openapi-schema-pydantic==1.2.4
 packaging==23.1
 pandas==2.0.3
@@ -56,6 +59,7 @@ patsy==0.5.3
 Pillow==9.5.0
 plotly==5.15.0
 protobuf==4.23.3
+psutil==5.9.5
 pyarrow==12.0.1
 pydantic==1.10.11
 pydeck==0.8.1b0

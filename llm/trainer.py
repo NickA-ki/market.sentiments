@@ -8,6 +8,7 @@ from langchain import HuggingFaceHub
 from langchain import PromptTemplate, LLMChain
 
 from data.source import DataSource, DataSchema
+from config import config
 
 
 LOGGER = logging.getLogger(__name__)
@@ -15,15 +16,16 @@ logging.basicConfig(level=logging.INFO)
 
 
 class LLMIns(DataSource, DataSchema):
-    def __init__(self) -> None:
+    def __init__(self, temperature: float = 0.3) -> None:
         super().__init__()
-        openai.api_key = "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"
-        os.environ["HUGGINGFACEHUB_API_TOKEN"] = "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"
+        self.temp = temperature
+        openai.api_key = config.OPENAI_API
+        os.environ["HUGGINGFACEHUB_API_TOKEN"] = config.HF_API
         self.model = "gpt-3.5-turbo"
         self.falcon = "tiiuae/falcon-40b-instruct"
         self.llm = HuggingFaceHub(
             repo_id=self.falcon,
-            model_kwargs={"temperature": 0.3, "max_new_tokens": 2000},
+            model_kwargs={"temperature": self.temp, "max_new_tokens": 2000},
         )
 
     def create_training_docs(self) -> None:
@@ -47,7 +49,7 @@ class LLMIns(DataSource, DataSchema):
             max_tokens=1024,
             n=1,
             stop=None,
-            temperature=0.5,
+            temperature=self.temp,
         )
 
         return response.choices[0].text
