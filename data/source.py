@@ -32,6 +32,7 @@ class DataSource:
 
         query = f"""
         SELECT * FROM {table}
+        WHERE Date >= "2020-01-01"
         ORDER BY Date DESC
         """
         logging.info("data loaded")
@@ -70,7 +71,9 @@ class DataSource:
     def tidy_data(self, df: pd.DataFrame) -> pd.DataFrame:
         df = df.sort_values(DataSchema.DATE, ascending=False).reset_index(drop=True)
         df.rename(columns={"Description": DataSchema.SUMMARY}, inplace=True)
-        df[DataSchema.DATE] = pd.to_datetime(df[DataSchema.DATE]).dt.date
+        df[DataSchema.DATE] = pd.to_datetime(
+            df[DataSchema.DATE], format="mixed"
+        ).dt.date
         df[DataSchema.SEARCH] = (
             df[DataSchema.TITLE].str.lower() + df[DataSchema.SUMMARY].str.lower()
         )

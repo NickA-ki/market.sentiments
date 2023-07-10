@@ -4,10 +4,12 @@ from data.source import source, DataSchema
 from src.components.bar_charts import plot_major_loss_trend
 from src.components.filter_dataframe import draw_aggrid
 from src.utils.utils import utils
+import datetime
 
 
 # NOTE: loading data ----
 df = source.load_data(table="major_loss_articles")
+df = df[df.Date >= datetime.date(year=2022, month=1, day=1)].reset_index(drop=True)
 
 # Page Header ----
 utils.page_title("Major Loss Tracking")
