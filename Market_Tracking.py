@@ -10,16 +10,15 @@ from src.utils.utils import utils
 from streamlit_extras import toggle_switch
 from streamlit_card import card
 
-st.set_page_config(layout="wide")
+# Page Header ----
+utils.page_title("Market Tracking")
 
 authenticator, authentication_status = authenticate()
 
 if authentication_status:
     df = source.load_data()
-    ai_model = LLMIns()
-
-    # Page Header ----
-    utils.page_title("Market Tracking")
+    if "chat_model" not in st.session_state:
+        st.session_state["chat_model"]: LLMIns = LLMIns()  ## Intialisation
 
     # sidebar controls ----
     st.sidebar.subheader("Article Search")
@@ -48,8 +47,11 @@ if authentication_status:
     # Generate the response
     if st.button("Get Answer"):
         with st.spinner("Generating Answer..."):
-            response = ai_model.falcon_generate(question)
-        st.success(response)
+            try:
+                response = st.session_state["chat_model"].falcon_with_articles(question)
+                st.success(response)
+            except Exception as e:
+                st.error(f"Error answering the question: {str(e)}")
 
     # Chart and KPI Cards ----
     tog = toggle_switch.st_toggle_switch(

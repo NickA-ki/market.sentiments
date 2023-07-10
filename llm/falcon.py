@@ -5,6 +5,7 @@ import torch
 model = "tiiuae/falcon-7b-instruct"
 
 tokenizer = AutoTokenizer.from_pretrained(model)
+model = AutoModelForCausalLM.from_pretrained(model, trust_remote_code=True)
 pipeline = transformers.pipeline(
     "text-generation",
     model=model,

@@ -42,6 +42,11 @@ class Utils:
             return 0
 
     def page_title(self, title: str, n: int = 0) -> None:
+        st.set_page_config(
+            page_title="Market Dashboard",
+            page_icon="🔖",
+            layout="wide",
+        )
         col1, col2 = st.columns([1, 8], gap="large")
         with col1:
             st.image(
