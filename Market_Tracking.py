@@ -48,7 +48,7 @@ if authentication_status:
     if st.button("Get Answer"):
         with st.spinner("Generating Answer..."):
             try:
-                response = st.session_state["chat_model"].falcon_with_articles(question)
+                response = st.session_state["chat_model"].falcon_generate(question)
                 st.success(response)
             except Exception as e:
                 st.error(f"Error answering the question: {str(e)}")
