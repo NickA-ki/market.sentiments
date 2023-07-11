@@ -72,7 +72,7 @@ class DataSource:
         df = df.sort_values(DataSchema.DATE, ascending=False).reset_index(drop=True)
         df.rename(columns={"Description": DataSchema.SUMMARY}, inplace=True)
         df[DataSchema.DATE] = pd.to_datetime(
-            df[DataSchema.DATE], format="mixed"
+            df[DataSchema.DATE], format="mixed", utc=True
         ).dt.date
         df[DataSchema.SEARCH] = (
             df[DataSchema.TITLE].str.lower() + df[DataSchema.SUMMARY].str.lower()

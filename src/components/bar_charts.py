@@ -52,6 +52,9 @@ def plot_article_sentiments(df: DataFrame, percentage: bool = True) -> px.bar:
 
 
 def plot_major_loss_trend(df: DataFrame, loss_search: str = "Ian") -> go.Figure:
+    ave_ml = int(
+        round(df.groupby(["YearMonth"]).agg({"Title": Series.nunique}).Title.mean(), 0)
+    )
     if len(loss_search) > 0:
         df_search = df[
             ~(df.Title.str.contains(loss_search))
@@ -86,7 +89,6 @@ def plot_major_loss_trend(df: DataFrame, loss_search: str = "Ian") -> go.Figure:
         line_dash="dash",
         line_color="black",
     )
-    ave_ml = int(round(df2.Title.mean(), 0))
     fig.add_annotation(
         y=ave_ml + 1,
         x=df2.YearMonth.unique()[-1],
