@@ -7,6 +7,9 @@ __pycache__/
 *.pdf
 *.xlsx
 *.csv
+.chroma
+/chroma
+ggml-gpt4all-j-v1.3-groovy.bin
 
 # C extensions
 *.so

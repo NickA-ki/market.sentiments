@@ -1,12 +1,19 @@
 from pydantic import BaseSettings
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class Config(BaseSettings):
+    # ChatGPT API:
+    CHAT_PDF_API: str = os.getenv("CHAT_PDF_API")
+
     # HF API
-    HF_API: str = "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"
+    HF_API: str = os.getenv("HF_API")
 
     # OpenAI API
-    OPENAI_API: str = "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"
+    OPENAI_API: str = os.getenv("OPENAI_API")
 
 
 config = Config()
