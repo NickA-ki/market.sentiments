@@ -10,7 +10,7 @@ from src.utils.utils import utils
 from streamlit_chat import message
 from streamlit_extras.colored_header import colored_header
 
-tmpdir = Path("./tmpdir")
+tmpdir = Path("./docs")
 
 utils.page_title("Q&A Bot for PDF")
 
