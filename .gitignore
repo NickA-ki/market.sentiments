@@ -9,6 +9,7 @@ __pycache__/
 *.csv
 .chroma
 /chroma
+tmpdir/*
 ggml-gpt4all-j-v1.3-groovy.bin
 
 # C extensions

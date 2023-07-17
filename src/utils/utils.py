@@ -1,5 +1,6 @@
 from plotly.graph_objects import Figure
 import numpy as np
+import base64
 import streamlit as st
 
 
@@ -40,6 +41,17 @@ class Utils:
             return np.average(x, weights=weights)
         except ZeroDivisionError:
             return 0
+
+    def display_pdf(self, file):
+        # Opening file from file path
+        with open(file, "rb") as f:
+            base64_pdf = base64.b64encode(f.read()).decode("utf-8")
+
+        # Embedding PDF in HTML
+        pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="100%" height="1000" type="application/pdf"></iframe>'
+
+        # Displaying File
+        st.markdown(pdf_display, unsafe_allow_html=True)
 
     def page_title(self, title: str, n: int = 0) -> None:
         st.set_page_config(
