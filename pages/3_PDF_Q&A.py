@@ -86,11 +86,13 @@ with st.sidebar:
             st.session_state["pdf_qa_model"].config = {
                 "pdf_path": tmpdir,
                 "embedding": EMB_SBERT_MINILM,
-                "llm": LLM_GPT4ALL,
+                "llm": LLM_FALCON_SMALL,
                 "load_in_8bit": load_in_8bit,
             }
             st.session_state["pdf_qa_model"].embedding = load_emb(EMB_SBERT_MINILM)
-            st.session_state["pdf_qa_model"].llm = load_llm(LLM_GPT4ALL, load_in_8bit)
+            st.session_state["pdf_qa_model"].llm = load_llm(
+                LLM_FALCON_SMALL, load_in_8bit
+            )
             st.session_state["pdf_qa_model"].init_embeddings()
             st.session_state["pdf_qa_model"].init_models()
             st.session_state["pdf_qa_model"].vector_db_pdf(gpt4all=True)
