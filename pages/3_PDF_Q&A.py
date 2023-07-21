@@ -32,7 +32,7 @@ def load_llm(llm, load_in_8bit):
     elif llm == LLM_FASTCHAT_T5_XL:
         return PdfQA.create_fastchat_t5_xl(load_in_8bit)
     elif llm == LLM_FALCON_SMALL:
-        return PdfQA.create_falcon_instruct_small(load_in_8bit)
+        return PdfQA.create_falcon_instruct_small()
     elif llm == LLM_GPT4ALL:
         return PdfQA.create_gpt4all()
     else:
@@ -55,6 +55,14 @@ def load_emb(emb):
 load_in_8bit = False
 # tmpdir = TemporaryDirectory()
 
+if "submitted" not in st.session_state:
+    st.session_state.submitted = True
+
+
+def activate_text_input() -> None:
+    st.session_state.submitted = False
+
+
 with st.sidebar:
     pdf_file = st.file_uploader(
         "**Upload PDF**", type="pdf", accept_multiple_files=True
@@ -70,13 +78,10 @@ with st.sidebar:
             except Exception as e:
                 print("Failed to delete %s. Reason: %s" % (file_path, e))
 
-    if "submit_button" in st.session_state and pdf_file is not None:
-        st.session_state.submitted = False
-
-    else:
-        st.session_state.submitted = True
-
-    if st.button("Submit", key="submit_button") and pdf_file is not None:
+    if (
+        st.button("Submit", key="submit_button", on_click=activate_text_input)
+        and pdf_file is not None
+    ):
         with st.spinner(text="Uploading PDF and Generating Embeddings.."):
             for file in pdf_file:
                 uploaded_file_path = Path(tmpdir.name) / file.name
@@ -99,7 +104,9 @@ with st.sidebar:
             st.sidebar.success("PDF uploaded successfully")
 
 # question = st.text_input("Ask a question", "What is this document?")
-
+## past stores User's questions
+if "past" not in st.session_state:
+    st.session_state["past"] = ["Hi!"]
 
 if "generated" not in st.session_state:
     st.session_state["generated"] = [
@@ -107,9 +114,6 @@ if "generated" not in st.session_state:
     ]
     st.session_state["pdf_image"] = []
     st.session_state["pdf_source"] = None
-## past stores User's questions
-if "past" not in st.session_state:
-    st.session_state["past"] = ["Hi!"]
 
 
 # Set tabs ----
@@ -141,7 +145,7 @@ with message_tab:
     with input_container:
         user_input = get_text(st.session_state.submitted)
         if st.session_state.submitted:
-            st.warning("Please load pdf before asking questions...")
+            st.warning("Please load and submit pdf files before asking questions...")
     with response_container:
         if user_input:
             response = generate_response(user_input)
