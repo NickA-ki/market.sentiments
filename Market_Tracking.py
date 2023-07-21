@@ -11,7 +11,7 @@ from streamlit_extras import toggle_switch
 from streamlit_card import card
 
 # Page Header ----
-utils.page_title("Market Tracking")
+utils.page_title("Market Tracking ")
 
 authenticator, authentication_status = authenticate()
 
