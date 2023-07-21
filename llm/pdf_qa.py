@@ -5,6 +5,7 @@ from langchain.text_splitter import (
     RecursiveCharacterTextSplitter,
 )
 from transformers import pipeline
+from langchain import HuggingFaceHub
 from langchain.prompts import PromptTemplate
 from langchain.chat_models import ChatOpenAI
 from langchain.vectorstores import Chroma
@@ -156,25 +157,19 @@ class PdfQA:
         )
 
     @classmethod
-    def create_falcon_instruct_small(cls, load_in_8bit=False):
-        model = "tiiuae/falcon-7b-instruct"
-
-        tokenizer = AutoTokenizer.from_pretrained(model)
-        hf_pipeline = pipeline(
-            task="text-generation",
-            model=model,
-            tokenizer=tokenizer,
-            trust_remote_code=True,
-            max_new_tokens=100,
+    def create_falcon_instruct_small(cls):
+        os.environ["HUGGINGFACEHUB_API_TOKEN"] = "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"
+        falcon_llm = HuggingFaceHub(
+            repo_id="tiiuae/falcon-7b-instruct",
+            task="text2text-generation",
             model_kwargs={
                 "device_map": "auto",
-                "load_in_8bit": load_in_8bit,
+                "temperature": 0.5,
+                "max_new_tokens": 200,
                 "max_length": 512,
-                "temperature": 0.01,
-                "torch_dtype": torch.bfloat16,
             },
         )
-        return hf_pipeline
+        return falcon_llm
 
     @classmethod
     def create_gpt4all(cls):
