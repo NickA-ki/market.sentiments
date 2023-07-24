@@ -10,7 +10,7 @@ class Config(BaseSettings):
     CHAT_PDF_API: str = os.getenv("CHAT_PDF_API")
 
     # HF API
-    HF_API: str = os.getenv("HF_API")
+    HF_API: str = os.getenv("HUGGINGFACEHUB_API_TOKEN")
 
     # OpenAI API
     OPENAI_API: str = os.getenv("OPENAI_API")

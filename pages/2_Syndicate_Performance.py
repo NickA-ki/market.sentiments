@@ -50,7 +50,7 @@ tab1, tab2, tab3, tab4 = st.tabs(
 
 with st.spinner("Loading Modelling..."):
     # Model ----
-    model = LloydsModel(lloyds, cob)
+    model = LloydsModel(lloyds, cob, start_year=2012)
 
     # Chart ----
     with tab1:

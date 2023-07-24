@@ -145,10 +145,10 @@ class LloydsModel(Copula):
             )
         else:
             model_df = (
-                model_final.sort_values("Q4", ascending=True)[
+                model_final.sort_values("Q4", ascending=False)[
                     ["SyndicateCode", "Q1", "Q2", "Q3", "Q4"]
                 ]
-                .tail(n)
+                .head(n)
                 .set_index("SyndicateCode")
             )
         if syndicates:

@@ -29,7 +29,6 @@ class LLMIns(DataSource, DataSchema):
         super().__init__()
         self.temp = temperature
         openai.api_key = config.OPENAI_API
-        os.environ["HUGGINGFACEHUB_API_TOKEN"] = "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"
         self.model = "gpt-3.5-turbo"
         self.falcon = "tiiuae/falcon-7b-instruct"
         self.llm = HuggingFaceHub(

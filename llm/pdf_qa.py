@@ -158,10 +158,8 @@ class PdfQA:
 
     @classmethod
     def create_falcon_instruct_small(cls):
-        os.environ["HUGGINGFACEHUB_API_TOKEN"] = "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"
         falcon_llm = HuggingFaceHub(
             repo_id="tiiuae/falcon-7b-instruct",
-            task="text2text-generation",
             model_kwargs={
                 "device_map": "auto",
                 "temperature": 0.5,
@@ -285,7 +283,9 @@ class PdfQA:
                 chain_type="stuff",
                 retriever=self.vectordb.as_retriever(search_kwargs={"k": 3}),
             )
-        elif self.config["llm"] == LLM_GPT4ALL:
+        elif (
+            self.config["llm"] == LLM_GPT4ALL or self.config["llm"] == LLM_FALCON_SMALL
+        ):
             template = """
                     You are an artificial intelligence assistant who understands insurance.
                     Use the following pieces of context to answer the question at the end.
