@@ -7,10 +7,14 @@ __pycache__/
 *.pdf
 *.xlsx
 *.csv
+*.jpg
+*.png
 .chroma
 /chroma
 tmpdir/*
 ggml-gpt4all-j-v1.3-groovy.bin
+/llm-experiments
+/demo
 
 # C extensions
 *.so
