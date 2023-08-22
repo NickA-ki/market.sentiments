@@ -73,7 +73,7 @@ class LloydsModel(Copula):
         for index, row in syndicate_mu_sd.iterrows():
             m = syndicate_mu_sd.loc[index, "Mean"]
             v = syndicate_mu_sd.loc[index, "Std"]
-            sigma = np.sqrt(np.log(1 + (v / m) ** 2))
+            sigma = np.sqrt(np.log(1 + (v / m**2)))
             mu = np.log(m) - (0.5 * (sigma) ** 2)
             model[index] = np.random.lognormal(mu, sigma, self.no_sims)
 

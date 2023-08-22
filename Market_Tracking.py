@@ -57,28 +57,29 @@ if authentication_status:
     tog = toggle_switch.st_toggle_switch(
         label="Show as % of Articles:", default_value=True
     )
-    card1, card2 = st.columns([0.75, 0.25])
-    with card1:
-        chart_slot = st.empty()
-    with card2:
-        card(
-            text="Articles",
-            title=f"{articles:,}",
-            styles=utils.card_style[0],
-            on_click=lambda: None,
-        )
-        card(
-            text="Mkt Sentiment",
-            title=f"{sentiment}",
-            styles=utils.card_style[0],
-            on_click=lambda: None,
-        )
-        card(
-            text="Articles",
-            title=f"{search_text}",
-            styles=utils.card_style[0],
-            on_click=lambda: None,
-        )
+    with st.spinner("Fetching Articles..."):
+        card1, card2 = st.columns([0.75, 0.25])
+        with card1:
+            chart_slot = st.empty()
+        with card2:
+            card(
+                text="Articles",
+                title=f"{articles:,}",
+                styles=utils.card_style[0],
+                on_click=lambda: None,
+            )
+            card(
+                text="Mkt Sentiment",
+                title=f"{sentiment}",
+                styles=utils.card_style[0],
+                on_click=lambda: None,
+            )
+            card(
+                text="Articles",
+                title=f"{search_text}",
+                styles=utils.card_style[0],
+                on_click=lambda: None,
+            )
 
     # Table ----
     st.subheader("Articles:")
@@ -86,18 +87,17 @@ if authentication_status:
     df = grid_response["data"]
 
     # Append chart data ----
-    with st.spinner("Displaying results..."):
-        # displays the chart
-        if tog:
-            chart_slot.plotly_chart(
-                plot_article_sentiments(df, True),
-                use_container_width=True,
-            )
-        else:
-            chart_slot.plotly_chart(
-                plot_article_sentiments(df, False),
-                use_container_width=True,
-            )
+    # displays the chart
+    if tog:
+        chart_slot.plotly_chart(
+            plot_article_sentiments(df, True),
+            use_container_width=True,
+        )
+    else:
+        chart_slot.plotly_chart(
+            plot_article_sentiments(df, False),
+            use_container_width=True,
+        )
 
 elif authentication_status == False:
     st.error("Username/password is incorrect")

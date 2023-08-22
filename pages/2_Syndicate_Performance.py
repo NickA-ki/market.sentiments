@@ -41,8 +41,8 @@ utils.show_syndicate_name(syndicates, synd_dict)
 # Set up tab structure:
 tab1, tab2, tab3, tab4 = st.tabs(
     [
-        "Syndicate Performance",
         "YoY CoR Change",
+        "Syndicate Performance",
         "YoY CoR Distributions",
         "Rank Prediction",
     ]
@@ -55,11 +55,11 @@ with st.spinner("Loading Modelling..."):
     # Chart ----
     with tab1:
         st.text("")
-        chart_slot = st.empty()
+        st.pyplot(plot_cor_change(lloyds, cob, syndicates), use_container_width=True)
 
     with tab2:
         st.text("")
-        st.pyplot(plot_cor_change(lloyds, cob, syndicates), use_container_width=True)
+        chart_slot = st.empty()
 
     with tab3:
         st.text("")
@@ -79,6 +79,6 @@ with st.spinner("Loading Modelling..."):
 
     # Attach updated chart ---
     chart_slot.plotly_chart(
-        plot_syndicate_quadrant(lloyds, cob, syndicates, net=10),
+        plot_syndicate_quadrant(lloyds, cob, syndicates, net=15),
         use_container_width=True,
     )

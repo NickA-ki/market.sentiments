@@ -48,7 +48,7 @@ def plot_cor_change(lloyds: pd.DataFrame, cob: str, syndicates: list = []) -> pl
     plt.style.use("default")
 
     # Plotting
-    fig, ax = plt.subplots(figsize=(10, 18), facecolor="white")
+    fig, ax = plt.subplots(figsize=(8, 16), facecolor="white")
     ax.grid(axis="x")
 
     plt.hlines(

@@ -13,7 +13,7 @@ class Config(BaseSettings):
     HF_API: str = os.getenv("HUGGINGFACEHUB_API_TOKEN")
 
     # OpenAI API
-    OPENAI_API: str = os.getenv("OPENAI_API")
+    OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY")
 
 
 config = Config()
