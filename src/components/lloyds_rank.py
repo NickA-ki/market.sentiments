@@ -72,9 +72,10 @@ def plot_cor_change(lloyds: pd.DataFrame, cob: str, syndicates: list = []) -> pl
         label=f"{start_year}",
     )
     plt.legend(loc="upper right", bbox_to_anchor=(1, 1.05))
-    plt.title("COR (%) Change")
+    plt.title("Combined Ratio Change 2021 to 2022")
     plt.xlabel("Combined Ratio (%)")
     plt.ylabel("Syndicate")
+    plt.axvline(x=100, ymin=0, ymax=1, color="black", linestyle=":")
     if syndicates:
         for syn in syndicates:
             try:

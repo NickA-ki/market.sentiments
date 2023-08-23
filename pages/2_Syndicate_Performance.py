@@ -31,8 +31,12 @@ cob = st.sidebar.selectbox(
     ),
 )
 
+timeframe = st.sidebar.number_input(
+    "Select last 'n' years:", min_value=2, max_value=10, value=9, step=1
+)
+
 syndicates = st.sidebar.multiselect(
-    "Select Syndcates",
+    "Select Syndcates:",
     options=lloyds.SyndicateCode.unique(),
 )
 
@@ -50,7 +54,7 @@ tab1, tab2, tab3, tab4 = st.tabs(
 
 with st.spinner("Loading Modelling..."):
     # Model ----
-    model = LloydsModel(lloyds, cob, start_year=2012)
+    model = LloydsModel(lloyds, cob, start_year=2022 - timeframe)
 
     # Chart ----
     with tab1:
@@ -76,9 +80,10 @@ with st.spinner("Loading Modelling..."):
             model.plot_model_output(alpha=1, head=False, codes=syndicates),
             use_container_width=True,
         )
+        st.text(f"* Modelling based on years: {2022 - timeframe} to 2022")
 
     # Attach updated chart ---
     chart_slot.plotly_chart(
-        plot_syndicate_quadrant(lloyds, cob, syndicates, net=15),
+        plot_syndicate_quadrant(lloyds, cob, syndicates, net=15, timeframe=timeframe),
         use_container_width=True,
     )

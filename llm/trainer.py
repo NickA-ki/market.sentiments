@@ -28,7 +28,7 @@ class LLMIns(DataSource, DataSchema):
     def __init__(self, temperature: float = 0.3) -> None:
         super().__init__()
         self.temp = temperature
-        openai.api_key = config.OPENAI_API
+        openai.api_key = config.OPENAI_API_KEY
         self.model = "gpt-3.5-turbo"
         self.falcon = "tiiuae/falcon-7b-instruct"
         self.llm = HuggingFaceHub(
