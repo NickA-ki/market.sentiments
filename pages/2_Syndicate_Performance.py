@@ -18,16 +18,14 @@ utils.page_title("Syndicate Performance")
 st.sidebar.subheader("Lloyd's Filters")
 cob = st.sidebar.selectbox(
     "Select Lloyd's COB:",
-    sorted(
-        (
-            "Aviation",
-            "Property",
-            "Casualty",
-            "Marine",
-            "Energy",
-            "Motor",
-            "Reinsurance",
-        )
+    (
+        "Property",
+        "Casualty",
+        "Marine",
+        "Energy",
+        "Reinsurance",
+        "Aviation",
+        "Motor",
     ),
 )
 
