@@ -14,7 +14,7 @@ DOWW_LISTED_INDICATOR_PUBLIC: str = "No ADR"
 
 @dataclass
 class MetaData:
-    metadata = pd.read_csv("./data/do_factors.csv")
+    metadata = pd.read_csv("./data/do_metadata.csv")
 
     DOMICILE_RATE = dict(zip(*metadata.iloc[:, 0:2].dropna().values.T))
 
