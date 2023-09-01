@@ -7,6 +7,7 @@ __pycache__/
 *.pdf
 *.xlsx
 *.csv
+!./data/do_factors.csv
 *.jpg
 *.png
 .chroma
