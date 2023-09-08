@@ -8,6 +8,7 @@ __pycache__/
 *.xlsx
 *.csv
 !./data/do_metadata.csv
+!./data/exposure.csv
 *.jpg
 *.png
 .chroma

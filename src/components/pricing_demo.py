@@ -1,7 +1,9 @@
 import pandas as pd
 import numpy as np
+import scipy.stats as stats
 import plotly.express as px
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 from dateutil import parser
 from datetime import datetime
 from functools import reduce
@@ -357,3 +359,195 @@ def get_price_doww(input_doww: RequestDOWW) -> float:
         bar_chart_features=features,
         bar_chart_multipliers=multipliers,
     )
+
+
+def lognorm_params(mean: float, std: float) -> list:
+    """
+    https://www.johndcook.com/blog/2022/02/24/find-log-normal-parameters/
+    """
+    sigma = np.sqrt(np.log((std**2 / mean**2) + 1))
+    mu = np.log(mean) - (0.5 * (sigma) ** 2)
+    return (sigma, mu)
+
+
+def aggregate_loss_model(
+    severity: str,
+    frequency: str,
+    sev_mean: float,
+    sev_sd: float,
+    freq_mean: float,
+    freq_sd: float,
+    limit: float,
+    attachment: float,
+    aad: float = 0,
+    n_sims: float = 10000,
+    ground_up: bool = True,
+) -> List[float]:
+    match severity:
+        case "LogNormal":
+            sigma, mu = lognorm_params(sev_mean, sev_sd)
+            sev = stats.lognorm(s=sigma, loc=0, scale=np.exp(mu))
+        case "Gamma":
+            sev = stats.gamma(
+                a=(sev_mean / sev_sd) ** 2, loc=0, scale=(sev_sd**2 / sev_mean)
+            )
+
+    match frequency:
+        case "Poisson":
+            freq = stats.poisson(mu=freq_mean)
+        case "NBinomial":
+            freq_p = 1 / (freq_sd**2 / freq_mean)
+            freq_n = freq_mean * freq_p / (1 - freq_p)
+            freq = stats.nbinom(n=freq_n, p=freq_p)
+
+    ## Agg Model: MC Simulation ##
+    losses = []
+    if ground_up:
+        for i in freq.rvs(size=n_sims):
+            losses.append(np.sum(sev.rvs(size=i)))
+    else:
+        for i in freq.rvs(size=n_sims):
+            losses.append(
+                np.sum(np.minimum(np.maximum((sev.rvs(size=i)) - attachment, 0), limit))
+            )
+        losses = np.maximum(losses - np.array(aad), 0)
+
+    sim_losses = sorted(losses)[::-1]
+
+    return sim_losses
+
+
+def confidence_interval(sim_losses: List[float], interval: float = 0.95) -> float:
+    ci = stats.t.interval(
+        interval,
+        df=len(sim_losses) - 1,
+        loc=np.mean(sim_losses),
+        scale=stats.sem(sim_losses),
+    )
+    return ci
+
+
+def aggregate_table(sim_losses: List[float]) -> pd.DataFrame:
+    rp = [1000, 500, 250, 200, 100, 50, 25, 10, 5, 2, 5, 10, 25, 50]
+    percentiles = [99.99, 99.8, 99.6, 99.5, 99, 98, 96, 90, 80, 50, 20, 10, 4, 2]
+    up_down = pd.DataFrame({"Return Period": rp, "Percentile": percentiles})
+    up_down["Total Loss ($USD)"] = up_down["Percentile"].apply(
+        lambda x: np.percentile(sim_losses, q=x)
+    )
+    return up_down.style.format(
+        {"Total Loss ($USD)": "${:,.2f}", "Percentile": "{:.2f}"}
+    )
+
+
+def aggregate_chart(
+    sim_losses: List[float], rp: float, n_sims: float = 10000
+) -> go.Figure:
+    fig = px.line(
+        y=sim_losses,
+        x=((np.arange(1, n_sims + 1, 1) / n_sims) * 100)[::-1],
+        log_x=True,
+        color_discrete_sequence=["#FF3333"],
+    )
+    # fig.add_vline(100 - (100 / rp), line_dash="dash")
+    fig.update_layout(
+        template="plotly_white",
+        xaxis=dict(
+            title="Percentile (Log Scale)",
+            ticksuffix="%",
+        ),
+        yaxis=dict(title="Loss Cost ($USD)", tickprefix="$"),
+    )
+    return fig
+
+
+def frequency_chart(
+    frequency: str, freq_mean: float, freq_sd: float, n_sims: float = 10000
+) -> go.Figure:
+    match frequency:
+        case "Poisson":
+            freq = stats.poisson(mu=freq_mean)
+        case "NBinomial":
+            freq_p = 1 / (freq_sd**2 / freq_mean)
+            freq_n = freq_mean * freq_p / (1 - freq_p)
+            freq = stats.nbinom(n=freq_n, p=freq_p)
+    # fig = px.histogram(freq.rvs(size=n_sims), color_discrete_sequence=["#FF3333"])
+    x = np.arange(
+        freq.ppf(0.01),
+        freq.ppf(
+            0.99,
+        ),
+    )
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+    fig.add_trace(
+        go.Bar(
+            name="PMF",
+            x=x,
+            y=freq.pmf(x),
+            marker_color="#FF3333",
+        )
+    )
+    fig.add_trace(
+        go.Scatter(name="CDF", x=x, y=freq.cdf(x), mode="lines", line_color="#33ff99"),
+        secondary_y=True,
+    )
+    fig.update_yaxes(rangemode="tozero")
+    fig.update_layout(
+        template="plotly_white",
+        showlegend=False,
+        xaxis=dict(
+            title="Claim Count",
+            ticksuffix="",
+        ),
+        yaxis=dict(title="PMF"),
+        yaxis2=dict(title="CDF"),
+    )
+    return fig
+
+
+def severity_chart(
+    severity: str, sev_mean: float, sev_sd: float, n_sims: float = 10000
+) -> go.Figure:
+    match severity:
+        case "LogNormal":
+            sigma, mu = lognorm_params(sev_mean, sev_sd)
+            sev = stats.lognorm(s=sigma, loc=0, scale=np.exp(mu))
+        case "Gamma":
+            sev = stats.gamma(
+                a=(sev_mean / sev_sd) ** 2, loc=0, scale=(sev_sd**2 / sev_mean)
+            )
+    # fig = px.histogram(sev.rvs(size=n_sims), color_discrete_sequence=["#FF3333"])
+    x = np.linspace(
+        sev.ppf(0.01),
+        sev.ppf(
+            0.99,
+        ),
+        100,
+    )
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+    fig.add_trace(
+        go.Scatter(
+            name="PDF",
+            x=x,
+            y=sev.pdf(x),
+            mode="lines",
+            line_color="#FF3333",
+            fill="tozeroy",
+        )
+    )
+    fig.add_trace(
+        go.Scatter(name="CDF", x=x, y=sev.cdf(x), mode="lines", line_color="#33ff99"),
+        secondary_y=True,
+    )
+    fig.update_yaxes(rangemode="tozero")
+    fig.update_layout(
+        template="plotly_white",
+        showlegend=False,
+        xaxis=dict(
+            title="Claim Amount ($USD)",
+            ticksuffix="",
+            tickprefix="$",
+        ),
+        yaxis=dict(title="PDF"),
+        yaxis2=dict(title="CDF"),
+    )
+    return fig

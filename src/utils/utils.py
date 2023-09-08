@@ -2,6 +2,7 @@ from plotly.graph_objects import Figure
 import numpy as np
 import base64
 import streamlit as st
+from typing import Callable, List
 
 
 class Utils:
@@ -31,9 +32,15 @@ class Utils:
             </style>
         """
 
+    def highlight_column(self, val: float, greater_than: float):
+        color = "#FF3333" if val >= greater_than else "#33ff99"
+        return f"background-color: {color}"
+
+    def vectorize(self, f: Callable, *args) -> List[float]:
+        return np.vectorize(f)(*args)
+
     def figure_layout(self, fig: Figure) -> Figure:
         fig = fig.update_layout(template="plotly_white")
-
         return fig
 
     def weighted_mean(self, x: np.array, weights: np.array) -> int:
@@ -42,7 +49,7 @@ class Utils:
         except ZeroDivisionError:
             return 0
 
-    def display_pdf(self, file):
+    def display_pdf(self, file) -> None:
         # Opening file from file path
         with open(file, "rb") as f:
             base64_pdf = base64.b64encode(f.read()).decode("utf-8")

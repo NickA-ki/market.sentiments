@@ -45,6 +45,9 @@ class DataSource:
 
         return lloyds
 
+    def load_init_exposure(self) -> pd.DataFrame:
+        return pd.read_csv("./data/exposure.csv")
+
     def lloyds_syndicate_dict(self) -> dict:
         lloyds = self.load_lloyds()
         df = (
