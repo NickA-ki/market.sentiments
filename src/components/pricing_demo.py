@@ -346,6 +346,8 @@ def get_price_doww(input_doww: RequestDOWW) -> float:
         and not a.startswith("limit_plus")
         and not a.startswith("multi")
         and not a.startswith("excess")
+        and not a.startswith("brokerage")
+        and not a.startswith("profit")
     ]
     multipliers = [factors.__getattribute__(i) for i in features]
 

@@ -57,9 +57,6 @@ fsspec==2023.6.0
 gast==0.4.0
 ghostscript==0.7
 gitdb==4.0.10
-GitPython==3.1.31
-google-auth==2.22.0
-google-auth-oauthlib==1.0.0
 google-pasta==0.2.0
 gpt4all==1.0.3
 grpcio==1.57.0
