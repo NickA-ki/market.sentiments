@@ -5,17 +5,7 @@ import datetime
 
 from src.utils.utils import utils
 from data.source import source
-from src.components.pricing_demo import (
-    get_price_doww,
-    aggregate_loss_model,
-    aggregate_table,
-    confidence_interval,
-    aggregate_chart,
-    frequency_chart,
-    severity_chart,
-    RequestDOWW,
-    MetaData,
-)
+from src.components.pricing_demo import *
 from src.components.exposure import ExposureRating
 
 # NOTE: load data ------
