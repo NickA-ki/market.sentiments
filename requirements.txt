@@ -128,7 +128,6 @@ patsy==0.5.3
 pdf2image==1.16.3
 pdf2text==1.0.0
 pdfminer>=20191125
-pdfplumber==0.9.0
 pexpect==4.8.0
 pickleshare==0.7.5
 Pillow==9.5.0
@@ -220,7 +219,6 @@ tenacity==8.2.2
 tensorboard==2.13.0
 tensorboard-data-server==0.7.1
 termcolor==2.3.0
-textract==1.6.5
 threadpoolctl==3.1.0
 tifffile==2023.7.18
 tiktoken==0.4.0
