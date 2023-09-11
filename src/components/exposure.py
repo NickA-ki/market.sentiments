@@ -67,12 +67,18 @@ class ExposureRating:
         exposure = self._exposure.copy()
         exposure["expected_loss"] = exposure["Premium"] * self.selected_loss_ratio
         exposure["premium_pct"] = exposure["Premium"] / self.subject_premium
-        exposure["d"] = self.attachment / ((exposure.Upper + exposure.Lower) / 2)
-        exposure["d + l"] = (self.attachment + self.limit) / (
-            (exposure.Upper + exposure.Lower) / 2
+        exposure["d"] = (
+            self.attachment / ((exposure.Upper + exposure.Lower) / 2) / exposure.Share
         )
-        exposure["d + 1"] = (self.attachment + 1) / (
-            (exposure.Upper + exposure.Lower) / 2
+        exposure["d + l"] = (
+            (self.attachment + self.limit)
+            / ((exposure.Upper + exposure.Lower) / 2)
+            / exposure.Share
+        )
+        exposure["d + 1"] = (
+            (self.attachment + 1)
+            / ((exposure.Upper + exposure.Lower) / 2)
+            / exposure.Share
         )
 
         exposure["G(d)"] = utils.vectorize(self.bernegger, exposure["d"])
