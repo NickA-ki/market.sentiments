@@ -140,21 +140,31 @@ else:
 with tab3:
     col_a, col_b = st.columns(2)
     agg_form = col_a.form("agg_form")
-    frequency = agg_form.selectbox("Frequency Distribution", ["Poisson", "NBinomial"])
+    frequency = agg_form.selectbox(
+        "Frequency Distribution", ["Poisson", "NBinomial", "Zero-Inflated Poisson"]
+    )
     freq_mean = agg_form.number_input(
         "Average Claim Frequency:",
-        min_value=0,
-        max_value=200,
-        value=3,
-        step=1,
+        min_value=0.0,
+        max_value=200.0,
+        value=3.0,
+        step=0.1,
     )
     freq_sd = agg_form.number_input(
         "Std Dev Claim Frequency:",
         min_value=0.0,
         max_value=200.0,
         value=1.0,
-        step=0.5,
+        step=0.1,
     )
+    freq_zi_p = agg_form.number_input(
+        "Claim Rate (%) (only for Zero Inflated):",
+        min_value=0.0,
+        max_value=100.0,
+        value=20.0,
+        step=0.1,
+    )
+    freq_zi_p /= 100
     if freq_sd**2 / freq_mean < 1 and frequency == "NBinomial":
         agg_form.warning(
             "Var/Mean ratio is < 1, consider Poisson distribution", icon="⚠️"
@@ -203,6 +213,14 @@ with tab3:
         step=1e0,
         format="%f",
     )
+    aal = agg_form.number_input(
+        "Select AAL ($USD):",
+        min_value=0e6,
+        max_value=100e6,
+        value=0e6,
+        step=1e0,
+        format="%f",
+    )
     ground_up = agg_form.checkbox("Apply layer details")
 
     agg_results = col_b.empty()
@@ -219,9 +237,11 @@ if agg_submitted:
         sev_sd,
         freq_mean,
         freq_sd,
+        freq_zi_p,
         limit2,
         attachment2,
         aad,
+        aal,
         n_sims,
         not ground_up,
     )
@@ -257,7 +277,7 @@ if agg_submitted:
         )
     with tab_b:
         st.plotly_chart(
-            frequency_chart(frequency, freq_mean, freq_sd, n_sims),
+            frequency_chart(frequency, freq_mean, freq_sd, freq_zi_p, n_sims),
             use_container_width=True,
         )
     with tab_c:

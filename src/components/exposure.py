@@ -134,7 +134,7 @@ class ExposureRating:
         fig.update_layout(
             yaxis=dict(title="Probability damage ratio does not exceed value"),
             yaxis2=dict(title="Percentage of risk retained by (re)insured"),
-            xaxis=dict(title="Dame Ratio / Deductible as a % of SI"),
+            xaxis=dict(title="Damage Ratio / Deductible as a % of SI"),
             legend=dict(yanchor="bottom", xanchor="right"),
         )
         return utils.figure_layout(fig)

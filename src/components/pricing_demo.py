@@ -6,10 +6,10 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from dateutil import parser
 from datetime import datetime
-from functools import reduce
 from math import prod
-from typing import Callable, Optional, Any, List, Dict
+from typing import Optional, Any, List, Dict
 from dataclasses import dataclass
+from src.utils.zipoisson import ZIPoisson
 
 DOWW_LISTED_INDICATOR_PUBLIC: str = "No ADR"
 
@@ -379,9 +379,11 @@ def aggregate_loss_model(
     sev_sd: float,
     freq_mean: float,
     freq_sd: float,
+    freq_zi_p: float,
     limit: float,
     attachment: float,
     aad: float = 0,
+    aal: float = 0,
     n_sims: float = 10000,
     ground_up: bool = True,
 ) -> List[float]:
@@ -401,9 +403,11 @@ def aggregate_loss_model(
             freq_p = 1 / (freq_sd**2 / freq_mean)
             freq_n = freq_mean * freq_p / (1 - freq_p)
             freq = stats.nbinom(n=freq_n, p=freq_p)
+        case "Zero-Inflated Poisson":
+            freq = ZIPoisson(freq_zi_p, freq_mean)
 
     ## Agg Model: MC Simulation ##
-    losses = []
+    losses = list()
     if ground_up:
         for i in freq.rvs(size=n_sims):
             losses.append(np.sum(sev.rvs(size=i)))
@@ -413,6 +417,8 @@ def aggregate_loss_model(
                 np.sum(np.minimum(np.maximum((sev.rvs(size=i)) - attachment, 0), limit))
             )
         losses = np.maximum(losses - np.array(aad), 0)
+        if aal > 0:
+            losses = np.minimum(losses, aal)
 
     sim_losses = sorted(losses)[::-1]
 
@@ -463,7 +469,11 @@ def aggregate_chart(
 
 
 def frequency_chart(
-    frequency: str, freq_mean: float, freq_sd: float, n_sims: float = 10000
+    frequency: str,
+    freq_mean: float,
+    freq_sd: float,
+    freq_zi_p: float,
+    n_sims: float = 10000,
 ) -> go.Figure:
     match frequency:
         case "Poisson":
@@ -472,6 +482,8 @@ def frequency_chart(
             freq_p = 1 / (freq_sd**2 / freq_mean)
             freq_n = freq_mean * freq_p / (1 - freq_p)
             freq = stats.nbinom(n=freq_n, p=freq_p)
+        case "Zero-Inflated Poisson":
+            freq = ZIPoisson(freq_zi_p, freq_mean)
     # fig = px.histogram(freq.rvs(size=n_sims), color_discrete_sequence=["#FF3333"])
     x = np.arange(
         freq.ppf(0.01),
