@@ -21,15 +21,16 @@ def increment_counter():
 
 if authentication_status:
     st.divider()
-    for article in range(len(df.head(st.session_state.count))):
-        mui_card(
-            title=df.loc[article][DataSchema.MAIN],
-            content=df.loc[article][DataSchema.SUMMARY],
-            date=df.loc[article][DataSchema.DATE],
-            link=df.loc[article][DataSchema.LINK],
-        )
-    col1, col2, col3 = st.columns([0.45, 0.3, 0.25])
-    col2.button("Load More...", type="primary", on_click=increment_counter)
+    with st.spinner("Loading feed..."):
+        for article in range(len(df.head(st.session_state.count))):
+            mui_card(
+                title=df.loc[article][DataSchema.MAIN],
+                content=df.loc[article][DataSchema.SUMMARY],
+                date=df.loc[article][DataSchema.DATE],
+                link=df.loc[article][DataSchema.LINK],
+            )
+        col1, col2, col3 = st.columns([0.45, 0.3, 0.25])
+        col2.button("Load More...", type="primary", on_click=increment_counter)
 
     with st.sidebar:
         logout(authenticator)

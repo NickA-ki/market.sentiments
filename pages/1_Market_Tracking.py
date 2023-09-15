@@ -14,7 +14,7 @@ from src.components.card import mui_kpi
 utils.page_title("Market Tracking ")
 
 df = source.load_data()
-print(df.columns)
+
 if "chat_model" not in st.session_state:
     st.session_state["chat_model"]: LLMIns = LLMIns()  ## Intialisation
 
@@ -51,16 +51,15 @@ if st.button("Get Answer"):
 
 # Chart and KPI Cards ----
 tog = toggle_switch.st_toggle_switch(label="Show as % of Articles:", default_value=True)
-with st.spinner("Fetching Articles..."):
-    card1, card2 = st.columns([0.75, 0.25])
-    with card1:
-        chart_slot = st.empty()
-    with card2:
-        st.divider()
-        mui_kpi(kpi=f"{articles:,}", name="Articles")
-        mui_kpi(kpi=f"{sentiment}", name="Mkt Sentiment")
-        mui_kpi(kpi=f"{search_text}", name="Articles")
-        st.divider()
+card1, card2 = st.columns([0.75, 0.25])
+with card1:
+    chart_slot = st.empty()
+with card2:
+    st.divider()
+    mui_kpi(kpi=f"{articles:,}", name="Articles")
+    mui_kpi(kpi=f"{sentiment}", name="Mkt Sentiment")
+    mui_kpi(kpi=f"{search_text}", name="Articles")
+    st.divider()
 
 # Table ----
 st.subheader("Articles:")
@@ -69,13 +68,14 @@ df = grid_response["data"]
 
 # Append chart data ----
 # displays the chart
-if tog:
-    chart_slot.plotly_chart(
-        plot_article_sentiments(df, True),
-        use_container_width=True,
-    )
-else:
-    chart_slot.plotly_chart(
-        plot_article_sentiments(df, False),
-        use_container_width=True,
-    )
+with st.spinner("Fetching Articles..."):
+    if tog:
+        chart_slot.plotly_chart(
+            plot_article_sentiments(df, True),
+            use_container_width=True,
+        )
+    else:
+        chart_slot.plotly_chart(
+            plot_article_sentiments(df, False),
+            use_container_width=True,
+        )
