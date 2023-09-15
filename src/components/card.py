@@ -5,7 +5,8 @@ from data.links import links
 
 
 def mui_card(title: str, content: str, date: str, link: str):
-    link_dict = links[urllib.parse.urlparse(link).netloc]
+    url = urllib.parse.urlparse(link).netloc
+    link_dict = links[url]
     with elements(
         key=str(uuid4()),
     ):
@@ -19,11 +20,12 @@ def mui_card(title: str, content: str, date: str, link: str):
             elevation=1,
         ):
             mui.CardHeader(
-                title=title,
+                title=mui.Typography(title, sx={"fontSize": 22}),
                 subheader=str(date),
-                avatar=mui.Avatar(
-                    link_dict["name"],
-                    sx={"bgcolor": link_dict["color"]},
+                avatar=mui.IconButton(
+                    mui.Avatar(link_dict["name"], sx={"bgcolor": link_dict["color"]}),
+                    href="https://" + url,
+                    target="_blank",
                 ),
             )
 
