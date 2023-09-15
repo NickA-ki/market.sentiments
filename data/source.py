@@ -14,6 +14,7 @@ class DataSchema:
     DATE: str = "Date"
     SUMMARY: str = "Summary"
     TITLE: str = "Title"
+    MAIN: str = "Main"
     LINK: str = "Link"
     YMDATE: str = "YearMonth"
     SEARCH: str = "TextSearch"
@@ -80,12 +81,13 @@ class DataSource:
         df[DataSchema.SEARCH] = (
             df[DataSchema.TITLE].str.lower() + df[DataSchema.SUMMARY].str.lower()
         )
+        df[DataSchema.MAIN] = df[DataSchema.TITLE]
         df[DataSchema.TITLE] = df.apply(
             lambda x: self.make_markdown(x.Title, x.Link), axis=1
         )
         df[DataSchema.YMDATE] = df[DataSchema.DATE].apply(self.date_formatter)
         try:
-            df = df.drop([DataSchema.LINK, "neg", "pos", "neu"], axis=1)
+            df = df.drop(["neg", "pos", "neu"], axis=1)
         except:
             df = df.drop([DataSchema.LINK], axis=1)
 

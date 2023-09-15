@@ -48,6 +48,8 @@ def draw_aggrid(df) -> AgGrid:
     gb.configure_column("TextSearch", hide=True)
     gb.configure_column("compound", hide=True)
     gb.configure_column("YearMonth", hide=True)
+    gb.configure_column("Main", hide=True)
+    gb.configure_column("Link", hide=True)
     # gb.configure_default_column(floatingFilter=True)
     gridOptions = gb.build()
 
