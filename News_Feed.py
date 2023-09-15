@@ -3,8 +3,11 @@ from src.utils.utils import utils
 from src.components.card import mui_card
 from data.source import source, DataSchema
 from src.components.auth import authenticate, logout
+import streamlit.components.v1 as components
 
 df = source.load_data()
+HtmlFile = open("./data/ads.html", "r", encoding="utf-8")
+source_code = HtmlFile.read()
 
 # Page Header ----
 utils.page_title("Insurance News Feed ")
@@ -31,6 +34,7 @@ if authentication_status:
             )
         col1, col2, col3 = st.columns([0.45, 0.3, 0.25])
         col2.button("Load More...", type="primary", on_click=increment_counter)
+        components.html(source_code, height=600)
 
     with st.sidebar:
         logout(authenticator)
