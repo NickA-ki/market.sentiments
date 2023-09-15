@@ -1,4 +1,6 @@
 import streamlit as st
+import datetime
+
 from src.utils.utils import utils
 from src.components.card import mui_card
 from data.source import source, DataSchema
@@ -21,6 +23,18 @@ if "count" not in st.session_state:
 def increment_counter():
     st.session_state.count += 5
 
+
+search = st.sidebar.text_input("Search articles", "")
+start_date = st.sidebar.date_input(
+    "Start date", datetime.datetime.strptime("2020-01-01", "%Y-%M-%d")
+)
+end_date = st.sidebar.date_input("End date", datetime.date.today())
+
+df = df[
+    (df[DataSchema.SEARCH].str.contains(search.lower()))
+    & (df[DataSchema.DATE] >= start_date)
+    & (df[DataSchema.DATE] <= end_date)
+].reset_index(drop=True)
 
 if authentication_status:
     st.divider()

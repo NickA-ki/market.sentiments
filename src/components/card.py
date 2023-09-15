@@ -20,7 +20,7 @@ def mui_card(title: str, content: str, date: str, link: str):
             elevation=1,
         ):
             mui.CardHeader(
-                title=mui.Typography(title, sx={"fontSize": 22}),
+                title=mui.Typography(title, sx={"fontSize": 18}),
                 subheader=str(date),
                 avatar=mui.IconButton(
                     mui.Avatar(link_dict["name"], sx={"bgcolor": link_dict["color"]}),
@@ -49,8 +49,8 @@ def mui_kpi(kpi: str, name: str):
                 "flexDirection": "column",
                 "borderRadius": 3,
                 "overflow": "hidden",
-                "borderStyle": "solid",
-                "borderColor": background,
+                # "borderStyle": "solid",
+                # "borderColor": background,
                 # "color": "white",
             },
             elevation=1,
