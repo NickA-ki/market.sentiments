@@ -67,7 +67,13 @@ if authentication_status:
             "Previous", type="primary", on_click=decrement_counter, disabled=disable
         )
         col4.button("Next", type="primary", on_click=increment_counter)
-        components.html(source_code, height=600)
+        # components.html(source_code, height=600)
+        st.markdown(
+            f"""
+            {source_code}
+            """,
+            unsafe_allow_html=True,
+        )
 
     with st.sidebar:
         logout(authenticator)
