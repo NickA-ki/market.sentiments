@@ -69,8 +69,19 @@ if authentication_status:
         col4.button("Next", type="primary", on_click=increment_counter)
         # components.html(source_code, height=600)
         st.markdown(
-            f"""
-            {source_code}
+            """
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8350475854193715"
+                crossorigin="anonymous"></script>
+            <!-- market_news -->
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-8350475854193715"
+                data-ad-slot="7942115995"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
             """,
             unsafe_allow_html=True,
         )
