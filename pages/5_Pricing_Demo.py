@@ -147,14 +147,14 @@ with tab3:
         "Average Claim Frequency:",
         min_value=0.0,
         max_value=200.0,
-        value=3.0,
+        value=10.0,
         step=0.1,
     )
     freq_sd = agg_form.number_input(
         "Std Dev Claim Frequency:",
         min_value=0.0,
         max_value=200.0,
-        value=1.0,
+        value=4.6,
         step=0.1,
     )
     freq_zi_p = agg_form.number_input(
@@ -175,14 +175,14 @@ with tab3:
         "Average Claim Severity:",
         min_value=0,
         max_value=10000000,
-        value=75000,
+        value=215000,
         step=1,
     )
     sev_sd = agg_form.number_input(
         "Std Dev Claim Severity:",
         min_value=0,
         max_value=10000000,
-        value=12500,
+        value=750000,
         step=1,
     )
     agg_form.divider()

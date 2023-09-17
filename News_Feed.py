@@ -17,11 +17,19 @@ utils.page_title("Insurance News Feed ")
 authenticator, authentication_status = authenticate()
 
 if "count" not in st.session_state:
-    st.session_state.count = 5
+    st.session_state.count = 12
 
 
 def increment_counter():
-    st.session_state.count += 5
+    st.session_state.count += 12
+
+
+def decrement_counter():
+    st.session_state.count -= 12
+
+
+def reset_counter():
+    st.session_state.count = 12
 
 
 search = st.sidebar.text_input("Search articles", "")
@@ -37,17 +45,28 @@ df = df[
 ].reset_index(drop=True)
 
 if authentication_status:
-    st.divider()
     with st.spinner("Loading feed..."):
-        for article in range(len(df.head(st.session_state.count))):
+        for article in range(st.session_state.count - 12, st.session_state.count):
             mui_card(
                 title=df.loc[article][DataSchema.MAIN],
                 content=df.loc[article][DataSchema.SUMMARY],
                 date=df.loc[article][DataSchema.DATE],
                 link=df.loc[article][DataSchema.LINK],
             )
-        col1, col2, col3 = st.columns([0.45, 0.3, 0.25])
-        col2.button("Load More...", type="primary", on_click=increment_counter)
+        col1, col2, col3, col4, col5 = st.columns(
+            [0.3, 0.1, 0.1, 0.1, 0.4], gap="small"
+        )
+        if st.session_state.count == 12:
+            disable = True
+        else:
+            disable = False
+        col2.button(
+            "Latest", type="secondary", on_click=reset_counter, disabled=disable
+        )
+        col3.button(
+            "Previous", type="primary", on_click=decrement_counter, disabled=disable
+        )
+        col4.button("Next", type="primary", on_click=increment_counter)
         components.html(source_code, height=600)
 
     with st.sidebar:
