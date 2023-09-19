@@ -415,6 +415,7 @@ def aggregate_loss_model(
         for i in freq.rvs(size=n_sims):
             sim_n = sev.rvs(size=i)
             sim_n_agg = np.sum(np.minimum(np.maximum(sim_n - attachment, 0), limit))
+            print(np.minimum(np.maximum(sim_n - attachment, 0), limit))
             """
             Alternative definition of AAD where it benefits the insured.
             See PIGI page 35

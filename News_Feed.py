@@ -5,7 +5,6 @@ from src.utils.utils import utils
 from src.components.card import mui_card
 from data.source import source, DataSchema
 from src.components.auth import authenticate, logout
-import streamlit.components.v1 as components
 
 df = source.load_data()
 HtmlFile = open("./data/ads.html", "r", encoding="utf-8")
@@ -67,7 +66,7 @@ if authentication_status:
             "Previous", type="primary", on_click=decrement_counter, disabled=disable
         )
         col4.button("Next", type="primary", on_click=increment_counter)
-        # components.html(source_code, height=600)
+        # st.components.v1.html(source_code, height=600)
         st.markdown(
             """
             <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8350475854193715"
