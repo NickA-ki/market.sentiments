@@ -4,7 +4,7 @@ import urllib.parse
 from data.links import links
 
 
-def mui_card(title: str, content: str, date: str, link: str) -> mui.Card:
+def mui_card(title: str, content: str, date: str, link: str):
     url = urllib.parse.urlparse(link).netloc
     link_dict = links[url]
     with elements(
@@ -36,7 +36,7 @@ def mui_card(title: str, content: str, date: str, link: str) -> mui.Card:
                 mui.IconButton(mui.icon.Share, href=link, target="_blank")
 
 
-def mui_kpi(kpi: str, name: str) -> mui.Card:
+def mui_kpi(kpi: str, name: str):
     background = "#FF3333"
     if kpi == "Positive":
         background = "#33ff99"
